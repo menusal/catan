@@ -35,6 +35,7 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
   const isMyTurn = remoteSession?.players[currentPlayerIdx] && (remoteSession.players[currentPlayerIdx] as any).playerId === currentPlayerId;
 
   const { canBuildSettlement, canBuildRoad, canBuildCity } = useGameLogic();
+  const player = players[currentPlayerIdx];
 
   const currentTurnRef = useRef(currentPlayerIdx);
   useEffect(() => {
@@ -52,65 +53,68 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
 
   const handleVertexClick = async (vId: string) => {
     if (!remoteSession || isMovingRobber || !isMyTurn) return;
-    if (!setupPhase && !remoteHasRolled) return notify("Debes lanzar los dados primero.", "error");
-    const player = players[currentPlayerIdx];
-    const isSettlementTurnSetup = setupPhase && setupStep % 2 === 0;
-    if (selectedAction === 'settlement' || isSettlementTurnSetup) {
-      if (setupPhase && setupStep % 2 !== 0) return notify("Debes poner una carretera.", "error");
+
+    if (setupPhase) {
+      if (setupStep % 2 !== 0) return notify("Debes poner una carretera.", "error");
       
-      const check = canBuildSettlement(vId, buildings, roads, player, setupPhase);
+      const check = canBuildSettlement(vId, buildings, roads, player, true);
       if (!check.success) return notify(check.message!, "error");
 
       const newBuildings: Record<string, Building> = { ...buildings, [vId]: { playerId: currentPlayerIdx, type: 'settlement' as BuildingType } };
       let updates: Partial<GameSession> = { buildings: newBuildings };
+
+      const numPlayers = players.length;
+      const nextStep = setupStep + 1;
       
-      if (setupPhase) {
-        const numPlayers = players.length;
-        const nextStep = setupStep + 1;
-        const turnIndex = Math.floor(nextStep / 2);
-        
-        let newRes = { ...player.resources };
-        // Give resources on the SECOND settlement (Snake order round 2)
-        if (turnIndex >= numPlayers && nextStep % 2 === 1) {
-          board.forEach(hex => {
-            if (hex.type === 'DESERT') return;
-            const [vx, vy] = vId.split('-').map(Number);
-            const hx = HEX_WIDTH * (hex.q + hex.r / 2) + CENTER_X;
-            const hy = HEX_HEIGHT * (3 / 4) * hex.r + CENTER_Y;
-            if (Math.sqrt((vx - hx)**2 + (vy - hy)**2) < HEX_SIZE + 5) {
-              const resName = RESOURCES[hex.type].name as ResourceType;
-              newRes[resName] = (newRes[resName] || 0) + 1;
-            }
-          });
-        }
-
-        updates.players = players.map((p, i) => {
-          if (i !== currentPlayerIdx) return p;
-          return { ...p, resources: newRes, points: (p.points || 0) + 1, inventory: { ...p.inventory, settlements: p.inventory.settlements - 1 } };
-        });
-
-        if (nextStep >= numPlayers * 4) {
-          updates.setupPhase = false;
-          updates.logs = ["¡Setup terminado! Tira los dados.", ...logs].slice(0, 8);
-        } else {
-          let playerIdx = turnIndex < numPlayers ? turnIndex : numPlayers - 1 - (turnIndex - numPlayers);
-          updates.setupStep = nextStep;
-          updates.currentPlayer = playerIdx;
-        }
-        setSelectedAction('road');
-      } else {
-        const cost = COSTS.settlement;
-        updates.players = players.map((p, i) => {
-          if (i !== currentPlayerIdx) return p;
-          const newRes = { ...p.resources };
-          Object.entries(cost).forEach(([res, val]) => { newRes[res as ResourceType] -= (val || 0); });
-          return { ...p, resources: newRes, points: (p.points || 0) + 1, inventory: { ...p.inventory, settlements: p.inventory.settlements - 1 } };
+      let newRes = { ...player.resources };
+      // Give resources on the SECOND settlement (Snake order round 2)
+      const turnIndex = Math.floor(nextStep / 2);
+      if (turnIndex >= numPlayers && nextStep % 2 === 1) {
+        board.forEach(hex => {
+          if (hex.type === 'DESERT') return;
+          const [vx, vy] = vId.split('-').map(Number);
+          const hx = HEX_WIDTH * (hex.q + hex.r / 2) + CENTER_X;
+          const hy = HEX_HEIGHT * (3 / 4) * hex.r + CENTER_Y;
+          if (Math.sqrt((vx - hx)**2 + (vy - hy)**2) < HEX_SIZE + 5) {
+            const resName = RESOURCES[hex.type].name as ResourceType;
+            newRes[resName] = (newRes[resName] || 0) + 1;
+          }
         });
       }
-      
-      const hasWinner = updates.players?.some((p: any) => p.points >= 10);
-      if (hasWinner) updates.gameState = 'WON';
 
+      updates.players = players.map((p, i) => {
+        if (i !== currentPlayerIdx) return p;
+        return { ...p, resources: newRes, points: (p.points || 0) + 1, inventory: { ...p.inventory, settlements: p.inventory.settlements - 1 } };
+      });
+
+      updates.setupStep = nextStep;
+      // DO NOT update currentPlayer here, keep the same player for the road
+      
+      await onUpdate(updates);
+      notify("¡Poblado construido!", "success");
+      setSelectedAction('road');
+      return;
+    }
+
+    if (!remoteHasRolled) return notify("Debes lanzar los dados primero.", "error");
+
+    if (selectedAction === 'settlement') {
+      const check = canBuildSettlement(vId, buildings, roads, player, false);
+      if (!check.success) return notify(check.message!, "error");
+
+      const newBuildings: Record<string, Building> = { ...buildings, [vId]: { playerId: currentPlayerIdx, type: 'settlement' as BuildingType } };
+      const cost = COSTS.settlement;
+      const newPlayers = players.map((p, i) => {
+        if (i !== currentPlayerIdx) return p;
+        const newRes = { ...p.resources };
+        Object.entries(cost).forEach(([res, val]) => { newRes[res as ResourceType] -= (val || 0); });
+        return { ...p, resources: newRes, points: (p.points || 0) + 1, inventory: { ...p.inventory, settlements: p.inventory.settlements - 1 } };
+      });
+
+      const hasWinner = newPlayers.some(p => p.points >= 10);
+      const updates: Partial<GameSession> = { buildings: newBuildings, players: newPlayers };
+      if (hasWinner) updates.gameState = 'WON';
+      
       await onUpdate(updates);
       notify("¡Poblado construido!", "success");
     } else if (selectedAction === 'city') {
@@ -215,11 +219,36 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
 
   const handleRoadClick = async (eId: string) => {
     if (!remoteSession || isMovingRobber || !isMyTurn) return;
-    if (!setupPhase && !remoteHasRolled) return notify("Debes lanzar los dados primero.", "error");
-    const player = players[currentPlayerIdx];
-    const isRoadTurnSetup = setupPhase && setupStep % 2 !== 0;
-    if (setupPhase && setupStep % 2 === 0) return notify("Debes poner un poblado.", "error");
-    if (!setupPhase && selectedAction !== 'road') return;
+
+    if (setupPhase) {
+      if (setupStep % 2 === 0) return notify("Debes poner un poblado.", "error");
+      
+      const check = canBuildRoad(eId, roads, buildings, player, true, false);
+      if (!check.success) return notify(check.message!, "error");
+
+      const newRoads = { ...roads, [eId]: currentPlayerIdx };
+      const nextStep = setupStep + 1;
+      const numPlayers = players.length;
+      
+      let updates: Partial<GameSession> = { roads: newRoads, setupStep: nextStep };
+      
+      if (nextStep >= numPlayers * 4) {
+        updates.setupPhase = false;
+        updates.logs = ["¡Setup terminado! Tira los dados.", ...logs].slice(0, 8);
+      } else {
+        const turnIndex = Math.floor(nextStep / 2);
+        let nextPlayerIdx = turnIndex < numPlayers ? turnIndex : numPlayers - 1 - (turnIndex - numPlayers);
+        updates.currentPlayer = nextPlayerIdx;
+      }
+
+      await onUpdate(updates);
+      notify("¡Carretera construida!", "success");
+      setSelectedAction('settlement');
+      return;
+    }
+
+    if (!remoteHasRolled) return notify("Debes lanzar los dados primero.", "error");
+    if (selectedAction !== 'road') return;
 
     const isFree = freeRoads > 0;
     const check = canBuildRoad(eId, roads, buildings, player, setupPhase, isFree);
@@ -268,26 +297,10 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
           );
         }
       } else {
-        // Just update maxRoadLength for current player
         finalPlayers = finalPlayers.map((p, i) => 
           i === currentPlayerIdx ? { ...p, maxRoadLength: Math.max(p.maxRoadLength || 0, playerRoadLength) } : p
         );
       }
-    }
-
-    if (isRoadTurnSetup) {
-        const numPlayers = players.length;
-        const nextStep = setupStep + 1;
-        if (nextStep >= numPlayers * 4) {
-          updates.setupPhase = false;
-          updates.logs = ["¡Setup terminado! Tira los dados.", ...logs].slice(0, 8);
-        } else {
-          const turnIndex = Math.floor(nextStep / 2);
-          let playerIdx = turnIndex < numPlayers ? turnIndex : numPlayers - 1 - (turnIndex - numPlayers);
-          updates.setupStep = nextStep;
-          updates.currentPlayer = playerIdx;
-        }
-        setSelectedAction('settlement');
     }
 
     const hasWinner = finalPlayers.some(p => p.points >= 10);
@@ -296,6 +309,7 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
     updates.players = finalPlayers;
     await onUpdate(updates);
     notify("¡Carretera construida!", "success");
+    setSelectedAction('settlement');
   };
 
   const handleHexClick = async (hexId: number) => {
