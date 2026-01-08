@@ -55,7 +55,11 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
     if (!remoteSession || isMovingRobber || !isMyTurn) return;
 
     if (setupPhase) {
-      if (setupStep % 2 !== 0) return notify("Debes poner una carretera.", "error");
+      const currentSetupStep = Number(setupStep); // Ensure number type
+      if (currentSetupStep % 2 !== 0) return notify("Debes poner una carretera.", "error");
+
+      const settlementCount = 5 - (player.inventory.settlements || 5);
+      if (settlementCount >= 2) return notify("Ya has puesto tus 2 poblados iniciales.", "error");
       
       const check = canBuildSettlement(vId, buildings, roads, player, true);
       if (!check.success) return notify(check.message!, "error");
@@ -64,7 +68,7 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
       let updates: Partial<GameSession> = { buildings: newBuildings };
 
       const numPlayers = players.length;
-      const nextStep = setupStep + 1;
+      const nextStep = currentSetupStep + 1;
       
       let newRes = { ...player.resources };
       // Give resources on the SECOND settlement (Snake order round 2)
@@ -221,17 +225,29 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
     if (!remoteSession || isMovingRobber || !isMyTurn) return;
 
     if (setupPhase) {
-      if (setupStep % 2 === 0) return notify("Debes poner un poblado.", "error");
+      const currentSetupStep = Number(setupStep); // Ensure number type
+      if (currentSetupStep % 2 === 0) return notify("Debes poner un poblado.", "error");
+
+      // During setup, roads are free, so we skip the cost check BUT we should check limits if desired
+      // Max 2 roads in setup
+      const roadCount = 15 - (player.inventory.roads || 15);
+      if (roadCount >= 2) return notify("Ya has puesto tus 2 carreteras iniciales.", "error");
       
       const check = canBuildRoad(eId, roads, buildings, player, true, false);
       if (!check.success) return notify(check.message!, "error");
 
       const newRoads = { ...roads, [eId]: currentPlayerIdx };
-      const nextStep = setupStep + 1;
+      const nextStep = currentSetupStep + 1;
       const numPlayers = players.length;
       
       let updates: Partial<GameSession> = { roads: newRoads, setupStep: nextStep };
       
+      // Update inventory for road (it's free but consumes a piece)
+      updates.players = players.map((p, i) => {
+          if (i !== currentPlayerIdx) return p;
+          return { ...p, inventory: { ...p.inventory, roads: p.inventory.roads - 1 } };
+      });
+
       if (nextStep >= numPlayers * 4) {
         updates.setupPhase = false;
         updates.logs = ["¡Setup terminado! Tira los dados.", ...logs].slice(0, 8);
