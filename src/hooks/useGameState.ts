@@ -49,6 +49,17 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
       currentTurnRef.current = currentPlayerIdx;
     }
   }, [currentPlayerIdx, players, setupPhase, notify]);
+  
+  // Sync robber state
+  useEffect(() => {
+    if (isMyTurn && remoteSession?.robberMovePending) {
+        const waiting = remoteSession.waitingForDiscards || [];
+        if (waiting.length === 0 && !isMovingRobber) {
+             setIsMovingRobber(true);
+             notify("¡Coloca el ladrón!", "info");
+        }
+    }
+  }, [isMyTurn, remoteSession?.robberMovePending, remoteSession?.waitingForDiscards, isMovingRobber, notify]);
 
 
   const handleVertexClick = async (vId: string) => {
@@ -164,8 +175,10 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
 
       if (discardsRequired.length > 0) {
         updates.waitingForDiscards = discardsRequired;
+        updates.robberMovePending = true;
       } else {
         setIsMovingRobber(true);
+        updates.robberMovePending = true;
       }
     } else {
       let gainedResources: Partial<Record<ResourceType, number>> = {};
@@ -357,7 +370,11 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
 
     const candidateList = Array.from(candidates);
     
-    await onUpdate({ robberHexId: hexId, logs: [`Ladrón movido al hex ${hexId}.`, ...logs].slice(0, 8) });
+    await onUpdate({ 
+      robberHexId: hexId, 
+      logs: [`Ladrón movido al hex ${hexId}.`, ...logs].slice(0, 8),
+      robberMovePending: false 
+    });
     setIsMovingRobber(false);
 
     if (candidateList.length === 0) {
@@ -556,11 +573,7 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
     };
 
     if (newWaiting.length === 0) {
-      // All discards done, now the current player moves the robber
-      const meIdx = players.findIndex(p => p.playerId === currentPlayerId);
-      if (currentPlayerIdx === meIdx) {
-        setIsMovingRobber(true);
-      }
+      // All discards done, the current player will be triggered via useEffect
     }
 
     await onUpdate(updates);

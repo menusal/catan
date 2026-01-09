@@ -66,6 +66,7 @@ export interface GameSession {
   lastUpdated: number;
   initialRolls?: Record<string, number>;
   waitingForDiscards?: number[]; // indices of players
+  robberMovePending?: boolean;
 }
 
 export interface Harbor {
