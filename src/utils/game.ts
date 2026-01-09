@@ -1,4 +1,5 @@
 import { HEX_WIDTH, HEX_HEIGHT, CENTER_X, CENTER_Y, HEX_SIZE } from '../constants/game';
+import type { Building } from '../types/game';
 
 export const getVertexPos = (q: number, r: number, index: number) => {
   const hx = HEX_WIDTH * (q + r / 2) + CENTER_X;
@@ -17,7 +18,7 @@ export const getDistance = (x1: number, y1: number, x2: number, y2: number) => {
 export const shuffle = <T>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
 };
-export const calculateLongestPath = (roads: Record<string, number>, playerId: number): number => {
+export const calculateLongestPath = (roads: Record<string, number>, buildings: Record<string, Building>, playerId: number): number => {
   const playerRoads = Object.entries(roads)
     .filter(([_, owner]) => owner === playerId)
     .map(([id]) => id);
@@ -36,6 +37,17 @@ export const calculateLongestPath = (roads: Record<string, number>, playerId: nu
   let maxLen = 0;
 
   const dfs = (v: string, visitedEdges: Set<string>): number => {
+    // Rule: If an enemy building is on this vertex, we cannot pass THROUGH it.
+    // If we arrived here (visitedEdges > 0), we must stop.
+    // (We can start FROM here if it's the root of the path, although in practice you can't build from enemy, 
+    // but calculating existing reads this is fine as an endpoint).
+    if (visitedEdges.size > 0) {
+      const building = buildings[v];
+      if (building && building.playerId !== playerId) {
+        return 0; 
+      }
+    }
+
     let best = 0;
     const neighbors = adj[v] || [];
     neighbors.forEach(nextV => {

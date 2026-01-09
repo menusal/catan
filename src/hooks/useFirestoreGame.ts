@@ -73,6 +73,7 @@ export const useFirestoreGame = () => {
     };
 
     await setDoc(doc(db, 'games', gameCode), newSession);
+    localStorage.setItem('catan_game_code', gameCode);
     return gameCode;
   };
 
@@ -84,10 +85,17 @@ export const useFirestoreGame = () => {
     
     const gameDoc = querySnapshot.docs[0];
     const session = gameDoc.data() as GameSession;
+
+    // Check if ALREADY joined first (allows rejoining active games)
+    if (session.players.some((p: any) => p.playerId === playerId)) {
+        localStorage.setItem('catan_game_code', session.gameCode);
+        return; 
+    }
+
     if (session.gameState !== 'LOBBY') throw new Error("El juego ya ha comenzado");
     if (session.players.length >= 4) throw new Error("El juego está lleno");
-    if (session.players.some((p: any) => p.playerId === playerId)) return; // Already in
-
+    
+    // Proceed to add new player
     const newPlayer: Player = {
       id: session.players.length,
       name: name || `Jugador ${session.players.length + 1}`,
@@ -104,6 +112,7 @@ export const useFirestoreGame = () => {
       players: [...session.players, newPlayer],
       lastUpdated: Date.now()
     });
+    localStorage.setItem('catan_game_code', session.gameCode);
   };
 
   const startGameRemote = async (gameCode: string) => {

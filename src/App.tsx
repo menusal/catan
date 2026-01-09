@@ -70,7 +70,12 @@ function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('game');
-    if (code) setActiveCode(code);
+    if (code) {
+      setActiveCode(code);
+    } else {
+      const savedCode = localStorage.getItem('catan_game_code');
+      if (savedCode) setActiveCode(savedCode);
+    }
   }, []);
 
   useEffect(() => {

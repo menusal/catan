@@ -119,15 +119,58 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
 
       const newBuildings: Record<string, Building> = { ...buildings, [vId]: { playerId: currentPlayerIdx, type: 'settlement' as BuildingType } };
       const cost = COSTS.settlement;
-      const newPlayers = players.map((p, i) => {
+      let finalPlayers = players.map((p, i) => {
         if (i !== currentPlayerIdx) return p;
         const newRes = { ...p.resources };
         Object.entries(cost).forEach(([res, val]) => { newRes[res as ResourceType] -= (val || 0); });
         return { ...p, resources: newRes, points: (p.points || 0) + 1, inventory: { ...p.inventory, settlements: p.inventory.settlements - 1 } };
       });
 
-      const hasWinner = newPlayers.some(p => p.points >= 10);
-      const updates: Partial<GameSession> = { buildings: newBuildings, players: newPlayers };
+      // Recalculate longest road for EVERYONE because this settlement might have broken a road
+      let newHolderIdx = remoteSession.longestRoadPlayer;
+      
+      // First, update everyone's cached Max Length
+      finalPlayers = finalPlayers.map((p, idx) => {
+        const len = calculateLongestPath(roads, newBuildings, idx);
+        return { ...p, maxRoadLength: len };
+      });
+
+      // Now determine who actually holds the card
+      // Logic:
+      // 1. If someone holds it (Idx != -1), check if they still have >= 5 AND strictly more than anyone else (or equal to challengers if they already held it).
+      // Actually simpler: iterate all players, find max. 
+      // Rule: Current holder keeps it on ties. New holder needs > current.
+      
+      let currentMax = 4;
+      if (newHolderIdx !== -1) {
+         currentMax = finalPlayers[newHolderIdx].maxRoadLength;
+         // If holder drops below 5, they lose it immediately
+         if (currentMax < 5) {
+             finalPlayers[newHolderIdx].points -= 2;
+             newHolderIdx = -1;
+             currentMax = 4;
+         }
+      }
+
+      // See if anyone beats the current standard
+      finalPlayers.forEach((p, idx) => {
+          if (p.maxRoadLength > currentMax && p.maxRoadLength >= 5) {
+              // Becomes new holder
+              if (newHolderIdx !== -1) {
+                  finalPlayers[newHolderIdx].points -= 2;
+              }
+              newHolderIdx = idx;
+              currentMax = p.maxRoadLength;
+              finalPlayers[idx].points += 2;
+          }
+      });
+      
+      const hasWinner = finalPlayers.some(p => p.points >= 10);
+      const updates: Partial<GameSession> = { 
+          buildings: newBuildings, 
+          players: finalPlayers,
+          longestRoadPlayer: newHolderIdx 
+      };
       if (hasWinner) updates.gameState = 'WON';
       
       await onUpdate(updates);
@@ -303,7 +346,7 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
       }
 
       // Check for Longest Road
-      const playerRoadLength = calculateLongestPath(newRoads, currentPlayerIdx);
+      const playerRoadLength = calculateLongestPath(newRoads, buildings, currentPlayerIdx);
       const currentHolderIdx = remoteSession.longestRoadPlayer;
       const currentMaxLength = currentHolderIdx === -1 ? 4 : players[currentHolderIdx].maxRoadLength || 4;
       
