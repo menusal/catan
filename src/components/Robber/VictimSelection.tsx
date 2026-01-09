@@ -43,7 +43,7 @@ const VictimSelection: React.FC<VictimSelectionProps> = ({ candidates, players, 
                 </div>
                 <div className="text-left">
                   <div className="font-black text-slate-800 text-sm italic uppercase">{player.name || `Jugador ${idx + 1}`}</div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                  <div className="text-[14px] md:text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
                     {totalCards} CARTAS DISPONIBLES
                   </div>
                 </div>

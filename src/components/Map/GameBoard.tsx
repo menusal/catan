@@ -198,7 +198,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
         >
           <Triangle size={20} />
           {inventory && (
-            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-orange-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-orange-500 text-white text-[14px] md:text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm">
               {inventory.settlements}
             </span>
           )}
@@ -209,7 +209,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
         >
           <Waypoints size={20} />
           {inventory && (
-            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-indigo-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-indigo-500 text-white text-[14px] md:text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm">
               {inventory.roads}
             </span>
           )}
@@ -220,7 +220,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
         >
           <Landmark size={20} />
           {inventory && (
-            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-yellow-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-yellow-500 text-white text-[14px] md:text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm">
               {inventory.cities}
             </span>
           )}

@@ -32,7 +32,7 @@ const TradePanel: React.FC<TradePanelProps> = ({ player, onTrade, getTradeRate, 
       </h2>
       <div className="w-full max-w-md md:max-w-xl space-y-4 md:space-y-10">
         <div>
-          <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] block mb-3 md:mb-6">ENTREGAR</label>
+          <label className="text-[14px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em] block mb-3 md:mb-6">ENTREGAR</label>
           <div className="grid grid-cols-5 gap-2 md:gap-3 justify-items-center">
             {(['Trigo', 'Lana', 'Madera', 'Arcilla', 'Mineral'] as const).map(res => {
               const k = Object.keys(RESOURCES).find(key => RESOURCES[key].name === res)!;
@@ -54,7 +54,7 @@ const TradePanel: React.FC<TradePanelProps> = ({ player, onTrade, getTradeRate, 
                   )}
                   <div className="relative z-10 flex flex-col items-center">
                     <span className="text-lg md:text-xl font-black text-white drop-shadow-[0_2px_3px_rgba(0,0,0,1)]">{player.resources[res]}</span>
-                    <span className="text-[10px] text-white font-black drop-shadow-[0_1px_2px_rgba(0,0,0,1)] uppercase">{rate}:1</span>
+                    <span className="text-[14px] md:text-[10px] text-white font-black drop-shadow-[0_1px_2px_rgba(0,0,0,1)] uppercase">{rate}:1</span>
                   </div>
                 </button>
               );
@@ -65,7 +65,7 @@ const TradePanel: React.FC<TradePanelProps> = ({ player, onTrade, getTradeRate, 
         <div className="flex justify-center py-1 md:py-2"><ChevronRight size={24} className="rotate-90 text-slate-200" /></div>
         
         <div>
-          <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] block mb-3 md:mb-6">RECIBIR 1</label>
+          <label className="text-[14px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em] block mb-3 md:mb-6">RECIBIR 1</label>
           <div className="grid grid-cols-5 gap-2 md:gap-3 justify-items-center">
             {(['Trigo', 'Lana', 'Madera', 'Arcilla', 'Mineral'] as const).map(res => {
               const k = Object.keys(RESOURCES).find(key => RESOURCES[key].name === res)!;

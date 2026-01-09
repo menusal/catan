@@ -32,7 +32,7 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
             </div>
             <div>
               <h2 className="text-2xl font-black text-white tracking-tight">REGLAS OFICIALES</h2>
-              <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Guía de Referencia</p>
+              <p className="text-slate-400 text-[14px] md:text-xs font-bold uppercase tracking-widest">Guía de Referencia</p>
             </div>
           </div>
           <button 
@@ -131,19 +131,19 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                   <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <div className="flex justify-between items-center mb-2">
                       <h4 className="font-bold text-white">Carretera</h4>
-                      <span className="bg-slate-700 text-xs px-2 py-1 rounded text-slate-300">0 PV</span>
+                      <span className="bg-slate-700 text-[14px] md:text-xs px-2 py-1 rounded text-slate-300">0 PV</span>
                     </div>
                     <div className="flex gap-2">
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/madera.png')] bg-cover relative shadow-sm" title="Madera"></div>
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/arcilla.png')] bg-cover relative shadow-sm" title="Arcilla"></div>
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">Conecta poblados. Necesaria para expandirse.</p>
+                    <p className="text-[14px] md:text-xs text-slate-400 mt-2">Conecta poblados. Necesaria para expandirse.</p>
                   </div>
 
                   <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <div className="flex justify-between items-center mb-2">
                       <h4 className="font-bold text-white">Poblado</h4>
-                      <span className="bg-blue-600 text-xs px-2 py-1 rounded text-white font-bold">1 PV</span>
+                      <span className="bg-blue-600 text-[14px] md:text-xs px-2 py-1 rounded text-white font-bold">1 PV</span>
                     </div>
                     <div className="flex gap-2">
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/madera.png')] bg-cover relative shadow-sm"></div>
@@ -151,7 +151,7 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/trigo.png')] bg-cover relative shadow-sm"></div>
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/lana.png')] bg-cover relative shadow-sm"></div>
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">Debe estar a 2 tramos de distancia de cualquier otro edificio.</p>
+                    <p className="text-[14px] md:text-xs text-slate-400 mt-2">Debe estar a 2 tramos de distancia de cualquier otro edificio.</p>
                   </div>
 
                   <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
@@ -166,20 +166,20 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/mineral.png')] bg-cover relative shadow-sm"></div>
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/mineral.png')] bg-cover relative shadow-sm"></div>
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">Sustituye a un poblado. Produce doble recurso.</p>
+                    <p className="text-[14px] md:text-xs text-slate-400 mt-2">Sustituye a un poblado. Produce doble recurso.</p>
                   </div>
 
                   <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <div className="flex justify-between items-center mb-2">
                       <h4 className="font-bold text-white">Carta de Desarrollo</h4>
-                      <span className="bg-slate-700 text-xs px-2 py-1 rounded text-slate-300">?</span>
+                      <span className="bg-slate-700 text-[14px] md:text-xs px-2 py-1 rounded text-slate-300">?</span>
                     </div>
                     <div className="flex gap-2">
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/trigo.png')] bg-cover relative shadow-sm"></div>
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/lana.png')] bg-cover relative shadow-sm"></div>
                       <div className="w-8 h-8 rounded bg-[url('/assets/cards/mineral.png')] bg-cover relative shadow-sm"></div>
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">Otorga caballeros, puntos o habilidades especiales.</p>
+                    <p className="text-[14px] md:text-xs text-slate-400 mt-2">Otorga caballeros, puntos o habilidades especiales.</p>
                   </div>
                 </div>
 
@@ -205,7 +205,7 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                       <div className="bg-slate-700 px-3 py-1 rounded text-white font-black text-lg">4:1</div>
                       <div>
                         <h4 className="font-bold text-white">Tasa Estándar</h4>
-                        <p className="text-xs text-slate-400">Sin puertos, entregas 4 iguales por 1 a elección.</p>
+                        <p className="text-[14px] md:text-xs text-slate-400">Sin puertos, entregas 4 iguales por 1 a elección.</p>
                       </div>
                     </div>
                     
@@ -213,7 +213,7 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                       <div className="bg-slate-700 px-3 py-1 rounded text-white font-black text-lg">3:1</div>
                       <div>
                         <h4 className="font-bold text-white">Puerto General (?)</h4>
-                        <p className="text-xs text-slate-400">Si posees este puerto, entregas 3 iguales por 1 a elección.</p>
+                        <p className="text-[14px] md:text-xs text-slate-400">Si posees este puerto, entregas 3 iguales por 1 a elección.</p>
                       </div>
                     </div>
 
@@ -221,7 +221,7 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                       <div className="bg-slate-700 px-3 py-1 rounded text-white font-black text-lg">2:1</div>
                       <div>
                         <h4 className="font-bold text-white">Puerto Especializado</h4>
-                        <p className="text-xs text-slate-400">Si posees el puerto de un recurso (ej. Madera), entregas 2 de ESE recurso por 1 cualquiera.</p>
+                        <p className="text-[14px] md:text-xs text-slate-400">Si posees el puerto de un recurso (ej. Madera), entregas 2 de ESE recurso por 1 cualquiera.</p>
                       </div>
                     </div>
                   </div>
@@ -269,27 +269,27 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg">
                       <h4 className="font-bold text-purple-300">Caballero</h4>
-                      <p className="text-xs text-purple-100">Mueve el Ladrón como si hubieras sacado un 7 (pero sin la regla de descarte). Cuenta para el Gran Ejército.</p>
+                      <p className="text-[14px] md:text-xs text-purple-100">Mueve el Ladrón como si hubieras sacado un 7 (pero sin la regla de descarte). Cuenta para el Gran Ejército.</p>
                     </div>
                     
                     <div className="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg">
                       <h4 className="font-bold text-purple-300">Progreso: Monopolio</h4>
-                      <p className="text-xs text-purple-100">Nombra 1 recurso. Todos los demás jugadores deben entregarte TODAS las cartas de ese tipo que tengan.</p>
+                      <p className="text-[14px] md:text-xs text-purple-100">Nombra 1 recurso. Todos los demás jugadores deben entregarte TODAS las cartas de ese tipo que tengan.</p>
                     </div>
 
                     <div className="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg">
                       <h4 className="font-bold text-purple-300">Progreso: Año de la Abundancia</h4>
-                      <p className="text-xs text-purple-100">Toma 2 cartas de recursos cualesquiera de la banca.</p>
+                      <p className="text-[14px] md:text-xs text-purple-100">Toma 2 cartas de recursos cualesquiera de la banca.</p>
                     </div>
 
                     <div className="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg">
                       <h4 className="font-bold text-purple-300">Progreso: Construcción de Rutas</h4>
-                      <p className="text-xs text-purple-100">Coloca 2 carreteras gratis en el tablero (siguiendo las reglas normales de conexión).</p>
+                      <p className="text-[14px] md:text-xs text-purple-100">Coloca 2 carreteras gratis en el tablero (siguiendo las reglas normales de conexión).</p>
                     </div>
 
                     <div className="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg">
                       <h4 className="font-bold text-purple-300">Punto de Victoria</h4>
-                      <p className="text-xs text-purple-100">Vale 1 Punto de Victoria. Deben mantenerse ocultas hasta que te den la victoria.</p>
+                      <p className="text-[14px] md:text-xs text-purple-100">Vale 1 Punto de Victoria. Deben mantenerse ocultas hasta que te den la victoria.</p>
                     </div>
                   </div>
                 </section>
@@ -310,7 +310,7 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                       <p className="text-slate-300 text-sm mb-3">
                         Se otorga al primer jugador que construya una ruta continua de al menos <strong>5 carreteras</strong>.
                       </p>
-                      <ul className="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                      <ul className="text-[14px] md:text-xs text-slate-400 space-y-1 list-disc pl-4">
                         <li>Si otro jugador construye una ruta <strong>más larga</strong> que la del poseedor actual, le roba la carta.</li>
                         <li>En caso de <strong>empate</strong>, el poseedor actual conserva la carta.</li>
                         <li>
@@ -327,7 +327,7 @@ const RulesPanel: React.FC<RulesPanelProps> = ({ onClose }) => {
                       <p className="text-slate-300 text-sm mb-3">
                         Se otorga al primer jugador que juegue <strong>3 cartas de Caballero</strong>.
                       </p>
-                      <ul className="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                      <ul className="text-[14px] md:text-xs text-slate-400 space-y-1 list-disc pl-4">
                         <li>Si otro jugador juega <strong>más caballeros</strong> que el poseedor actual, le roba la carta.</li>
                         <li>En caso de empate, el poseedor actual la conserva.</li>
                       </ul>

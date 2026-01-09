@@ -32,7 +32,7 @@ const MonopolyModal: React.FC<MonopolyModalProps> = ({ onSelect }) => {
                   />
                 )}
               </div>
-              <span className="text-[10px] font-black uppercase text-slate-500 group-hover:text-indigo-600">{res}</span>
+              <span className="text-[14px] md:text-[10px] font-black uppercase text-slate-500 group-hover:text-indigo-600">{res}</span>
             </button>
           );
         })}

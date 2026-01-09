@@ -56,7 +56,7 @@ const Notification: React.FC<NotificationProps> = ({ message, type, onClose, dur
     >
       <div className={`flex items-center gap-4 px-6 py-4 rounded-[2rem] border-2 shadow-[0_20px_50px_rgba(0,0,0,0.15)] ${bgColors[type]} w-full sm:max-w-md backdrop-blur-sm`}>
         <div className="shrink-0">{icons[type]}</div>
-        <div className={`flex-1 text-xs font-black uppercase tracking-tight leading-tight ${textColors[type]}`}>
+        <div className={`flex-1 text-[14px] md:text-xs font-black uppercase tracking-tight leading-tight ${textColors[type]}`}>
           {message}
         </div>
         <button 

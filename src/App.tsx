@@ -160,7 +160,7 @@ function App() {
                       {roll ? (
                         <span className="text-yellow-500 font-black text-2xl">{roll}</span>
                       ) : (
-                        <span className="text-slate-600 italic text-xs">Esperando...</span>
+                        <span className="text-slate-600 italic text-[14px] md:text-xs">Esperando...</span>
                       )}
                     </div>
                   );
@@ -258,19 +258,19 @@ function App() {
         <div className="flex bg-slate-100 p-0.5 rounded-xl w-[95%] md:w-auto shadow-inner">
           <button 
             onClick={() => setActiveView('board')} 
-            className={`flex-1 md:flex-none px-4 py-3 md:py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${activeView === 'board' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
+            className={`flex-1 md:flex-none px-4 py-3 md:py-1.5 rounded-lg text-[14px] md:text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${activeView === 'board' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
           >
             <MapIcon size={14} /> <span className="hidden xs:inline">MAPA</span>
           </button>
           <button 
             onClick={() => setActiveView('trade')} 
-            className={`flex-1 md:flex-none px-4 py-3 md:py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${activeView === 'trade' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
+            className={`flex-1 md:flex-none px-4 py-3 md:py-1.5 rounded-lg text-[14px] md:text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${activeView === 'trade' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
           >
             <ArrowRightLeft size={14} /> <span className="hidden xs:inline">BANCA</span>
           </button>
           <button 
             onClick={() => setActiveView('costs')} 
-            className={`flex-1 md:flex-none px-4 py-3 md:py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${activeView === 'costs' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
+            className={`flex-1 md:flex-none px-4 py-3 md:py-1.5 rounded-lg text-[14px] md:text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${activeView === 'costs' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
           >
             <ScrollText size={14} /> <span className="hidden xs:inline">COSTES</span>
           </button>
@@ -295,7 +295,7 @@ function App() {
           
           <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md px-6 py-2 rounded-full shadow-2xl border border-white z-10 flex items-center gap-3 max-w-[90%] scale-110">
              <div className="w-3 h-3 rounded-full animate-pulse shadow-[0_0_8px_rgba(0,0,0,0.2)]" style={{ backgroundColor: PLAYER_COLORS[currentPlayerIdx] }}></div>
-              <span className={`text-xs font-black uppercase truncate tracking-wider ${isMovingRobber ? 'text-red-600' : 'text-slate-800'}`}>
+              <span className={`text-[14px] md:text-xs font-black uppercase truncate tracking-wider ${isMovingRobber ? 'text-red-600' : 'text-slate-800'}`}>
                {waitingForDiscards.length > 0 ? "ESPERANDO DESCARTES..." : isMovingRobber ? "¡MUEVE AL LADRÓN!" : setupPhase ? `Setup: ${players[currentPlayerIdx]?.name || `J${currentPlayerIdx+1}`}` : `Turno ${players[currentPlayerIdx]?.name || `J${currentPlayerIdx+1}`}`}
              </span>
           </div>
@@ -324,10 +324,10 @@ function App() {
         <div className="w-full max-w-screen-md mx-auto px-4 md:px-8 -mt-8 mb-4 relative z-20">
           <button 
             onClick={nextTurn} 
-            disabled={(!(gameSession as any).hasRolled && !setupPhase) || isMovingRobber || !isMyTurn}
-            className={`w-full py-5 rounded-[2.5rem] font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_15px_40px_rgba(0,0,0,0.2)] border-4 border-white ${(!(gameSession as any).hasRolled && !setupPhase) || isMovingRobber || !isMyTurn ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none' : 'bg-orange-500 text-white hover:bg-orange-600 animate-in fade-in slide-in-from-bottom-2'}`}
+            disabled={setupPhase || (!(gameSession as any).hasRolled && !setupPhase) || isMovingRobber || !isMyTurn}
+            className={`w-full py-5 rounded-[2.5rem] font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_15px_40px_rgba(0,0,0,0.2)] border-4 border-white ${setupPhase || (!(gameSession as any).hasRolled && !setupPhase) || isMovingRobber || !isMyTurn ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none' : 'bg-orange-500 text-white hover:bg-orange-600 animate-in fade-in slide-in-from-bottom-2'}`}
           >
-            {isMyTurn ? "PASAR TURNO" : "ESPERANDO TURNO"} <ChevronRight size={20} />
+            {setupPhase ? "ESPERANDO TU TURNO..." : (isMyTurn ? "PASAR TURNO" : "ESPERANDO TURNO")} <ChevronRight size={20} />
           </button>
         </div>
 
@@ -449,7 +449,7 @@ function App() {
         )}
       </div>
       
-      <footer className="bg-white border-t px-4 py-3 flex justify-between items-center text-xs font-black text-slate-400 uppercase md:hidden shadow-inner">
+      <footer className="bg-white border-t px-4 py-3 flex justify-between items-center text-[14px] font-black text-slate-400 uppercase md:hidden shadow-inner">
          <span>TURNO: <span className="text-slate-900 font-bold">J{currentPlayerIdx + 1}</span></span>
          <span className={setupPhase ? 'text-orange-500 font-black' : 'text-green-500 font-black'}>{setupPhase ? 'SETUP' : 'JUEGO'}</span>
       </footer>

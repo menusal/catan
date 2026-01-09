@@ -27,12 +27,12 @@ const SplashScreen: React.FC<SplashProps> = ({
         <div className="bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl text-center border border-slate-700 max-w-sm w-full">
           <h2 className="text-3xl font-black text-yellow-500 mb-2 italic">SALA DE ESPERA</h2>
           <div className="bg-slate-900 p-4 rounded-2xl mb-6">
-            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-1">CÓDIGO DE PARTIDA</p>
+            <p className="text-slate-500 text-[14px] md:text-[10px] uppercase font-bold tracking-widest mb-1">CÓDIGO DE PARTIDA</p>
             <p className="text-4xl font-black text-white tracking-widest">{gameCode}</p>
           </div>
           
           <div className="space-y-3 mb-8 text-left">
-            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest border-b border-slate-700 pb-1">JUGADORES ({players?.length}/4)</p>
+            <p className="text-slate-500 text-[14px] md:text-[10px] uppercase font-bold tracking-widest border-b border-slate-700 pb-1">JUGADORES ({players?.length}/4)</p>
             {players?.map((p, i) => (
               <div key={i} className="flex items-center gap-3 bg-slate-700/50 p-3 rounded-xl border border-slate-600/50">
                 <div className="w-4 h-4 rounded-full bg-yellow-500" />
@@ -61,7 +61,7 @@ const SplashScreen: React.FC<SplashProps> = ({
               EMPEZAR PARTIDA
             </button>
           ) : (
-            <p className="text-slate-500 text-xs italic animate-pulse">Esperando a que el anfitrión comience...</p>
+            <p className="text-slate-500 text-[14px] md:text-xs italic animate-pulse">Esperando a que el anfitrión comience...</p>
           )}
         </div>
       </div>
@@ -73,17 +73,17 @@ const SplashScreen: React.FC<SplashProps> = ({
       {(isInstallable || isIOS) && (
         <button 
           onClick={promptInstall}
-          className="absolute top-6 right-6 bg-slate-800 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold text-xs flex items-center gap-2 transition-all shadow-lg border border-slate-700 hover:border-green-500 animate-in fade-in slide-in-from-top-4"
+          className="absolute top-6 right-6 bg-slate-800 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold text-[14px] md:text-xs flex items-center gap-2 transition-all shadow-lg border border-slate-700 hover:border-green-500 animate-in fade-in slide-in-from-top-4"
         >
           <Download size={14} /> INSTALAR APP
         </button>
       )}
       <div className="bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl text-center border border-slate-700 max-w-sm w-full">
         <h1 className="text-6xl font-black text-yellow-500 mb-2 italic tracking-tighter">CATAN</h1>
-        <p className="text-slate-500 text-[10px] mb-8 uppercase font-bold tracking-widest italic">Multiplayer Online Edition</p>
+        <p className="text-slate-500 text-[14px] md:text-[10px] mb-8 uppercase font-bold tracking-widest italic">Multiplayer Online Edition</p>
         
         <div className="mb-8 text-left">
-          <label className="text-[10px] uppercase font-black text-slate-500 italic tracking-widest mb-1.5 block ml-1 text-center">TU NOMBRE</label>
+          <label className="text-[14px] md:text-[10px] uppercase font-black text-slate-500 italic tracking-widest mb-1.5 block ml-1 text-center">TU NOMBRE</label>
           <input 
             type="text" 
             placeholder="Introduce tu nombre" 
@@ -110,7 +110,7 @@ const SplashScreen: React.FC<SplashProps> = ({
               <div className="w-full border-t border-slate-700"></div>
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-slate-800 px-4 text-[10px] uppercase font-black text-slate-500 italic tracking-widest">O ÚNETE A UNA</span>
+              <span className="bg-slate-800 px-4 text-[14px] md:text-[10px] uppercase font-black text-slate-500 italic tracking-widest">O ÚNETE A UNA</span>
             </div>
           </div>
 

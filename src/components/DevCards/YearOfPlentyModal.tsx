@@ -50,10 +50,10 @@ const YearOfPlentyModal: React.FC<YearOfPlentyModalProps> = ({ onSelect }) => {
                   </div>
                 )}
               </button>
-              <span className="text-[10px] font-black uppercase text-slate-500">{res}</span>
+              <span className="text-[14px] md:text-[10px] font-black uppercase text-slate-500">{res}</span>
               
               <div className="flex gap-1">
-                 <button onClick={() => setSelected([...selected, res])} disabled={selected.length >= 2} className="w-6 h-6 rounded-full bg-slate-800 text-white text-[10px] font-black disabled:opacity-20">+</button>
+                 <button onClick={() => setSelected([...selected, res])} disabled={selected.length >= 2} className="w-6 h-6 rounded-full bg-slate-800 text-white text-[14px] md:text-[10px] font-black disabled:opacity-20">+</button>
               </div>
             </div>
           );

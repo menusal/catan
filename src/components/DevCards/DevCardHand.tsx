@@ -53,13 +53,13 @@ const DevCardHand: React.FC<DevCardHandProps> = ({ hand, boughtRecently = [], on
                 {cardId !== 'vp' && (
                   <button 
                     disabled={!playable}
-                    className={`mt-auto w-full py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${playable ? 'bg-indigo-600 text-white shadow-lg' : 'bg-slate-200 text-slate-400'}`}
+                    className={`mt-auto w-full py-3 rounded-2xl font-black text-[14px] md:text-xs uppercase tracking-widest transition-all ${playable ? 'bg-indigo-600 text-white shadow-lg' : 'bg-slate-200 text-slate-400'}`}
                   >
                     {playable ? 'USAR AHORA' : (cardId === 'vp' ? 'PUNTO DE VICTORIA' : 'BLOQUEADA')}
                   </button>
                 )}
                 {cardId === 'vp' && (
-                  <div className="mt-auto bg-yellow-100 text-yellow-700 px-4 py-2 rounded-xl text-[10px] font-black uppercase">
+                  <div className="mt-auto bg-yellow-100 text-yellow-700 px-4 py-2 rounded-xl text-[14px] md:text-[10px] font-black uppercase">
                     Punto de Victoria (+1)
                   </div>
                 )}
@@ -75,15 +75,15 @@ const DevCardHand: React.FC<DevCardHandProps> = ({ hand, boughtRecently = [], on
                 key={`recent-${i}`} 
                 className="bg-slate-50 border-2 border-dashed border-indigo-200 rounded-[2.5rem] p-6 flex flex-col items-center opacity-70 relative overflow-hidden"
               >
-                <div className="absolute top-4 right-6 bg-indigo-600 text-white text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest">NUEVA</div>
+                <div className="absolute top-4 right-6 bg-indigo-600 text-white text-[14px] md:text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest">NUEVA</div>
                 <div className="mb-4 bg-white w-16 h-16 rounded-full shadow-sm flex items-center justify-center border-2 border-indigo-50">
                   {getIcon(cardId)}
                 </div>
                 <h3 className="text-xl font-black text-slate-400 uppercase mb-2">{data?.name}</h3>
-                <p className="text-xs text-slate-400 font-medium leading-tight mb-2">{data?.description}</p>
-                <p className="text-[10px] text-indigo-400 font-black uppercase tracking-tighter mb-6 italic">No se puede usar en el mismo turno</p>
+                <p className="text-[14px] md:text-xs text-slate-400 font-medium leading-tight mb-2">{data?.description}</p>
+                <p className="text-[14px] md:text-[10px] text-indigo-400 font-black uppercase tracking-tighter mb-6 italic">No se puede usar en el mismo turno</p>
                 
-                <div className="mt-auto w-full py-3 bg-slate-200 text-slate-400 rounded-2xl font-black text-xs uppercase tracking-widest text-center">
+                <div className="mt-auto w-full py-3 bg-slate-200 text-slate-400 rounded-2xl font-black text-[14px] md:text-xs uppercase tracking-widest text-center">
                   ESPERANDO TURNO
                 </div>
               </div>

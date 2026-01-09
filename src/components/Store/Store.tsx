@@ -58,9 +58,9 @@ const Store: React.FC<StoreProps> = ({ player, onBuy, devDeckCount, isMyTurn, ha
                 <div className={`w-14 h-14 rounded-2xl bg-white shadow-sm border-2 flex flex-col items-center justify-center mb-2 transition-colors ${hasEnough ? 'border-indigo-100' : 'border-red-100'}`}>
                   <span className="text-xs font-black text-slate-800 leading-none">{val}</span>
                   <div className="w-full border-t border-slate-100 my-0.5" />
-                  <span className={`text-[10px] font-bold ${hasEnough ? 'text-green-500' : 'text-red-500'}`}>{player.resources[resourceName]}</span>
+                  <span className={`text-[14px] md:text-[10px] font-bold ${hasEnough ? 'text-green-500' : 'text-red-500'}`}>{player.resources[resourceName]}</span>
                 </div>
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{res}</span>
+                <span className="text-[14px] md:text-[10px] font-black text-slate-400 uppercase tracking-tighter">{res}</span>
               </div>
             );
           })}
@@ -76,12 +76,12 @@ const Store: React.FC<StoreProps> = ({ player, onBuy, devDeckCount, isMyTurn, ha
             <span>COMPRAR</span>
           </div>
           {!canBuy && disabledReason && (
-            <span className="text-[10px] uppercase tracking-tighter opacity-80">{disabledReason}</span>
+            <span className="text-[14px] md:text-[10px] uppercase tracking-tighter opacity-80">{disabledReason}</span>
           )}
         </button>
       </div>
 
-      <p className="text-xs font-black text-slate-400 uppercase tracking-widest max-w-[80%] mx-auto leading-relaxed">
+      <p className="text-[14px] md:text-xs font-black text-slate-400 uppercase tracking-widest max-w-[80%] mx-auto leading-relaxed">
         Las cartas de desarrollo pueden darte Caballeros, Puntos de Victoria o Acciones Especiales.
       </p>
     </div>

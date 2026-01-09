@@ -41,10 +41,10 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded-lg shadow-sm" style={{ backgroundColor: PLAYER_COLORS[i] }}></div>
-                  <span className="font-black text-[10px] text-slate-700 uppercase">{p.name || `J${i+1}`}</span>
+                  <span className="font-black text-[14px] md:text-[10px] text-slate-700 uppercase">{p.name || `J${i+1}`}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="bg-slate-800 text-white px-2 py-1 rounded-full text-[9px] font-black">
+                  <div className="bg-slate-800 text-white px-2 py-1 rounded-full text-[14px] md:text-[9px] font-black">
                     {p.points} PV
                   </div>
                 </div>
@@ -53,16 +53,16 @@ const Sidebar: React.FC<SidebarProps> = ({
               {/* Achievements & Stats */}
               <div className="flex flex-wrap gap-2 mb-3">
                 {longestRoadPlayer === i && (
-                  <div className="flex items-center gap-1 bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-[8px] font-black uppercase ring-1 ring-orange-200">
+                  <div className="flex items-center gap-1 bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-[14px] md:text-[8px] font-black uppercase ring-1 ring-orange-200">
                     <Zap size={10} /> Gran Ruta
                   </div>
                 )}
                 {largestArmyPlayer === i && (
-                  <div className="flex items-center gap-1 bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-[8px] font-black uppercase ring-1 ring-indigo-200">
+                  <div className="flex items-center gap-1 bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-[14px] md:text-[8px] font-black uppercase ring-1 ring-indigo-200">
                     <Shield size={10} /> Gran Ejército
                   </div>
                 )}
-                <div className="flex items-center gap-3 text-[9px] font-bold text-slate-500 bg-slate-100/50 px-3 py-1 rounded-xl">
+                <div className="flex items-center gap-3 text-[14px] md:text-[9px] font-bold text-slate-500 bg-slate-100/50 px-3 py-1 rounded-xl">
                   <div className="flex items-center gap-1">
                     <ChevronRight size={10} className="text-slate-400" /> {p.maxRoadLength || 0} Carreteras
                   </div>
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </div>
 
               {!isMe && (
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center mt-1">
+                <div className="text-[14px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center mt-1">
                   Total cartas: {Object.values(p.resources).reduce((a, b) => a + b, 0)}
                 </div>
               )}
@@ -103,7 +103,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <div className="pt-3 border-t mt-3">
                   <button 
                     onClick={() => onPlayDevCard(i)} 
-                    className="w-full py-2.5 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-indigo-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    className="w-full py-2.5 bg-indigo-600 text-white rounded-2xl text-[14px] md:text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-indigo-700 active:scale-95 transition-all flex items-center justify-center gap-2"
                   >
                     CARTAS DE DESARROLLO
                   </button>
@@ -118,14 +118,14 @@ const Sidebar: React.FC<SidebarProps> = ({
           <button 
             onClick={onBuyDevCard} 
             disabled={!hasRolled || setupPhase || !isMyTurn}
-            className="w-full py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-2xl text-[10px] font-black mb-3 flex items-center justify-center gap-2 uppercase tracking-tighter disabled:opacity-30"
+            className="w-full py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-2xl text-[14px] md:text-[10px] font-black mb-3 flex items-center justify-center gap-2 uppercase tracking-tighter disabled:opacity-30"
           >
             <Box size={14} /> COMPRAR CARTA DE DESARROLLO
           </button>
-          <div className="text-[9px] font-black text-slate-400 mb-2 uppercase tracking-widest border-b pb-1 font-sans">
+          <div className="text-[14px] md:text-[9px] font-black text-slate-400 mb-2 uppercase tracking-widest border-b pb-1 font-sans">
             <Info size={12} /> Sucesos
           </div>
-          <div className="h-24 overflow-hidden pt-1 text-left text-[10px] space-y-1">
+          <div className="h-24 overflow-hidden pt-1 text-left text-[14px] md:text-[10px] space-y-1">
             {logs.map((log, i) => (
               <div key={i} className={i === 0 ? 'text-slate-900 font-bold' : 'text-slate-400'}>
                 {i === 0 ? "→ " : ""}{log}

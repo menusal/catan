@@ -29,10 +29,33 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
   const logs = remoteSession?.logs || [];
   const setupPhase = remoteSession?.setupPhase ?? true;
   const setupStep = remoteSession?.setupStep ?? 0;
-  const currentPlayerIdx = remoteSession?.currentPlayer ?? 0;
+  const numPlayers = remoteSession?.players?.length || 0;
+  
+  // During setup, calculate currentPlayer based on setupStep to ensure sync
+  let currentPlayerIdx: number;
+  if (setupPhase && numPlayers > 0) {
+    const currentTurnIndex = Math.floor(setupStep / 2);
+    if (currentTurnIndex < numPlayers) {
+      // First round: forward order
+      currentPlayerIdx = currentTurnIndex;
+    } else {
+      // Second round: reverse order
+      currentPlayerIdx = numPlayers - 1 - (currentTurnIndex - numPlayers);
+    }
+  } else {
+    currentPlayerIdx = remoteSession?.currentPlayer ?? 0;
+  }
+  
   const remoteHasRolled = (remoteSession as any)?.hasRolled ?? false;
 
   const isMyTurn = remoteSession?.players[currentPlayerIdx] && (remoteSession.players[currentPlayerIdx] as any).playerId === currentPlayerId;
+  
+  // Debug: Log turn state
+  useEffect(() => {
+    if (remoteSession && setupPhase) {
+      console.log(`[Turn Check] currentPlayerIdx=${currentPlayerIdx}, isMyTurn=${isMyTurn}, myPlayerId=${currentPlayerId}, currentPlayerId=${(remoteSession.players[currentPlayerIdx] as any)?.playerId}`);
+    }
+  }, [remoteSession, currentPlayerIdx, isMyTurn, currentPlayerId, setupPhase]);
 
   const { canBuildSettlement, canBuildRoad, canBuildCity } = useGameLogic();
   const player = players[currentPlayerIdx];
@@ -303,6 +326,18 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
       const nextStep = currentSetupStep + 1;
       const numPlayers = players.length;
       
+      // Verify that currentPlayerIdx matches the expected player for this step
+      const expectedPlayerForStep = (() => {
+        const turnIndex = Math.floor(currentSetupStep / 2);
+        return turnIndex < numPlayers 
+          ? turnIndex 
+          : numPlayers - 1 - (turnIndex - numPlayers);
+      })();
+      
+      if (currentPlayerIdx !== expectedPlayerForStep) {
+        console.warn(`[Setup] Warning: currentPlayerIdx (${currentPlayerIdx}) doesn't match expected player (${expectedPlayerForStep}) for step ${currentSetupStep}`);
+      }
+      
       let updates: Partial<GameSession> = { roads: newRoads, setupStep: nextStep };
       
       // Update inventory for road (it's free but consumes a piece)
@@ -311,23 +346,46 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
           return { ...p, inventory: { ...p.inventory, roads: p.inventory.roads - 1 } };
       });
 
-      // Calculate next player BEFORE checking if setup ends
-      // This ensures the transition happens correctly
-      const turnIndex = Math.floor(nextStep / 2);
-      let nextPlayerIdx = turnIndex < numPlayers ? turnIndex : numPlayers - 1 - (turnIndex - numPlayers);
+      // Calculate next player for the NEXT step (after this road placement)
+      // The next step will be for placing a settlement
+      let nextPlayerIdx: number;
       
       if (nextStep >= numPlayers * 4) {
-        // Setup ends, but we still need to set the correct starting player
+        // Setup ends - according to Catan rules, the first player (who placed first settlement/road) starts the game
         updates.setupPhase = false;
         // @ts-ignore
         updates.hasRolled = false; // Reset so first player can roll dice
-        updates.currentPlayer = nextPlayerIdx; // The player who placed the last road starts
+        nextPlayerIdx = 0; // First player starts after setup
+        updates.currentPlayer = nextPlayerIdx;
         updates.logs = ["¡Setup terminado! Tira los dados.", ...logs].slice(0, 8);
       } else {
-        // Setup continues, transition to next player
+        // Setup continues, calculate next player based on snake order
+        // The nextStep is the step number for the NEXT action (settlement placement)
+        // We need to determine which player should place that settlement
+        const nextTurnIndex = Math.floor(nextStep / 2);
+        
+        if (nextTurnIndex < numPlayers) {
+          // First round: forward order (0, 1, 2, ...)
+          nextPlayerIdx = nextTurnIndex;
+        } else {
+          // Second round: reverse order (..., 2, 1, 0)
+          // Formula: last player index - (turnIndex - numPlayers)
+          nextPlayerIdx = numPlayers - 1 - (nextTurnIndex - numPlayers);
+        }
+        
         updates.currentPlayer = nextPlayerIdx;
+        const nextPlayerName = players[nextPlayerIdx]?.name || `J${nextPlayerIdx + 1}`;
+        updates.logs = [`Setup: Turno de ${nextPlayerName}`, ...logs].slice(0, 8);
       }
 
+      // Ensure lastUpdated is set to trigger Firestore sync
+      updates.lastUpdated = Date.now();
+      
+      // Debug: Log the transition
+      const calculatedNextTurnIndex = Math.floor(nextStep / 2);
+      console.log(`[Setup] Player ${currentPlayerIdx} placed road at step ${currentSetupStep}. Next step: ${nextStep}, nextTurnIndex: ${calculatedNextTurnIndex}, nextPlayer: ${nextPlayerIdx} (total steps: ${numPlayers * 4})`);
+      console.log(`[Setup] Calculation: turnIndex ${calculatedNextTurnIndex} ${calculatedNextTurnIndex < numPlayers ? '<' : '>='} numPlayers ${numPlayers}`);
+      
       await onUpdate(updates);
       notify("¡Carretera construida!", "success");
       setSelectedAction('settlement');
