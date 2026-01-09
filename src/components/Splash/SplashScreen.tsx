@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, LogIn } from 'lucide-react';
+import { useNotifications } from '../../hooks/useNotifications';
 
 interface SplashProps {
   onCreateGame: (name: string) => void;
@@ -16,6 +17,7 @@ const SplashScreen: React.FC<SplashProps> = ({
 }) => {
   const [joinCode, setJoinCode] = useState('');
   const [playerName, setPlayerName] = useState('');
+  const { requestPermission } = useNotifications();
 
   if (isLobby) {
     return (
@@ -47,7 +49,10 @@ const SplashScreen: React.FC<SplashProps> = ({
 
           {isHost ? (
             <button 
-              onClick={onStartGame}
+              onClick={() => {
+                requestPermission();
+                onStartGame && onStartGame();
+              }}
               disabled={(players?.length || 0) < 2}
               className="w-full py-4 bg-yellow-500 text-slate-900 rounded-3xl font-black text-lg hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl"
             >
@@ -80,7 +85,10 @@ const SplashScreen: React.FC<SplashProps> = ({
 
         <div className="space-y-4">
           <button 
-            onClick={() => onCreateGame(playerName)}
+            onClick={() => {
+              requestPermission();
+              onCreateGame(playerName);
+            }}
             disabled={!playerName.trim()}
             className="w-full py-5 bg-white text-slate-900 rounded-3xl font-black text-lg hover:bg-yellow-400 flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl disabled:opacity-30 disabled:hover:scale-100 disabled:bg-white"
           >
@@ -106,7 +114,10 @@ const SplashScreen: React.FC<SplashProps> = ({
               maxLength={4}
             />
             <button 
-              onClick={() => onJoinGame(joinCode, playerName)}
+              onClick={() => {
+                requestPermission();
+                onJoinGame(joinCode, playerName);
+              }}
               disabled={joinCode.length < 4 || !playerName.trim()}
               className="w-full py-4 bg-slate-700 text-white rounded-2xl font-black text-sm hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all shadow-lg"
             >

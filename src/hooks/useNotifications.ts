@@ -19,6 +19,16 @@ export const useNotifications = () => {
   }, []);
 
   useEffect(() => {
+    // Create channel for Android
+    LocalNotifications.createChannel({
+      id: 'turn_notifications',
+      name: 'Turn Notifications',
+      description: 'Alerts when it is your turn',
+      importance: 5,
+      visibility: 1,
+      vibration: true,
+    }).catch(e => console.error("Channel creation error", e));
+
     LocalNotifications.checkPermissions().then((result) => {
       setHasPermission(result.display === 'granted');
     });
@@ -37,9 +47,11 @@ export const useNotifications = () => {
             title: "¡Es tu turno!",
             body: "Todos los jugadores están esperando tu jugada en Catan Online.",
             id: 1,
+            // Fire immediately
             schedule: { at: new Date(Date.now() + 100) },
-            sound: undefined,
-            attachments: undefined,
+            channelId: 'turn_notifications',
+            sound: 'beep.wav',
+            smallIcon: 'res_icon', // Android specific resource if available
             actionTypeId: "",
             extra: null
           }
