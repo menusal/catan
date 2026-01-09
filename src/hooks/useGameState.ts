@@ -311,14 +311,20 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
           return { ...p, inventory: { ...p.inventory, roads: p.inventory.roads - 1 } };
       });
 
+      // Calculate next player BEFORE checking if setup ends
+      // This ensures the transition happens correctly
+      const turnIndex = Math.floor(nextStep / 2);
+      let nextPlayerIdx = turnIndex < numPlayers ? turnIndex : numPlayers - 1 - (turnIndex - numPlayers);
+      
       if (nextStep >= numPlayers * 4) {
+        // Setup ends, but we still need to set the correct starting player
         updates.setupPhase = false;
         // @ts-ignore
         updates.hasRolled = false; // Reset so first player can roll dice
+        updates.currentPlayer = nextPlayerIdx; // The player who placed the last road starts
         updates.logs = ["¡Setup terminado! Tira los dados.", ...logs].slice(0, 8);
       } else {
-        const turnIndex = Math.floor(nextStep / 2);
-        let nextPlayerIdx = turnIndex < numPlayers ? turnIndex : numPlayers - 1 - (turnIndex - numPlayers);
+        // Setup continues, transition to next player
         updates.currentPlayer = nextPlayerIdx;
       }
 
