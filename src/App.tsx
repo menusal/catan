@@ -66,7 +66,7 @@ function App() {
   const [monopolyCard, setMonopolyCard] = useState<string | null>(null);
   const [yearOfPlentyCard, setYearOfPlentyCard] = useState<string | null>(null);
   const { sendTurnNotification, requestPermission } = useNotifications();
-  const { isInstallable, promptInstall } = usePWAInstall();
+  const { isInstallable, promptInstall, isIOS } = usePWAInstall();
 
   const [error, setError] = useState<string | null>(null);
   const [activeCode, setActiveCode] = useState<string | null>(null);
@@ -227,7 +227,7 @@ function App() {
         </div>
 
         <button 
-          onClick={() => window.location.href = '/'} 
+          onClick={() => { localStorage.removeItem('catan_game_code'); window.location.href = '/'; }}
           className="px-12 py-5 bg-yellow-500 hover:bg-yellow-400 text-slate-900 rounded-full font-black text-xl shadow-[0_0_30px_rgba(234,179,8,0.4)] transition-all hover:scale-105 active:scale-95"
         >
           SALIR AL MENÚ PRINCIPAL
@@ -249,9 +249,9 @@ function App() {
           >
             CATAN ONLINE - {gameSession.gameCode}
           </button>
-          <button onClick={() => window.location.href = '/'} className="md:hidden p-1 text-slate-300 hover:text-red-500"><Home size={18} /></button>
+          <button onClick={() => { localStorage.removeItem('catan_game_code'); window.location.href = '/'; }} className="md:hidden p-1 text-slate-300 hover:text-red-500"><Home size={18} /></button>
           <button onClick={() => setShowRules(true)} className="md:hidden p-1 text-slate-300 hover:text-blue-500 ml-2"><Info size={18} /></button>
-          {isInstallable && (
+          {(isInstallable || isIOS) && (
             <button onClick={promptInstall} className="md:hidden p-1 text-slate-300 hover:text-green-500 ml-2 animate-pulse"><Download size={18} /></button>
           )}
         </div>
@@ -276,11 +276,11 @@ function App() {
           </button>
         </div>
         <div className="flex items-center">
-          {isInstallable && (
+          {(isInstallable || isIOS) && (
              <button onClick={promptInstall} className="hidden md:block p-1 text-slate-300 mr-4 hover:text-green-500 transition-colors animate-pulse" title="Instalar Aplicación"><Download size={20} /></button>
           )}
           <button onClick={() => setShowRules(true)} className="hidden md:block p-1 text-slate-300 mr-2 hover:text-blue-500 transition-colors"><Info size={20} /></button>
-          <button onClick={() => window.location.href = '/'} className="hidden md:block p-1 text-slate-300 ml-4 hover:text-red-500"><Home size={20} /></button>
+          <button onClick={() => { localStorage.removeItem('catan_game_code'); window.location.href = '/'; }} className="hidden md:block p-1 text-slate-300 ml-4 hover:text-red-500"><Home size={20} /></button>
         </div>
       </div>
 

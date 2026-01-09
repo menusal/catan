@@ -16,6 +16,10 @@ export default defineConfig({
         short_name: 'Catan',
         description: 'Juego de mesa Catan en línea',
         theme_color: '#f59e0b',
+        background_color: '#0f172a',
+        display: 'standalone',
+        start_url: '/',
+        orientation: 'portrait-primary',
         icons: [
           {
             src: 'pwa-192x192.png',

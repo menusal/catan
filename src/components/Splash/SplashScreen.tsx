@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, LogIn } from 'lucide-react';
+import { Plus, LogIn, Download } from 'lucide-react';
 import { useNotifications } from '../../hooks/useNotifications';
+import { usePWAInstall } from '../../hooks/usePWAInstall';
 
 interface SplashProps {
   onCreateGame: (name: string) => void;
@@ -18,6 +19,7 @@ const SplashScreen: React.FC<SplashProps> = ({
   const [joinCode, setJoinCode] = useState('');
   const [playerName, setPlayerName] = useState('');
   const { requestPermission } = useNotifications();
+  const { isInstallable, promptInstall, isIOS } = usePWAInstall();
 
   if (isLobby) {
     return (
@@ -67,7 +69,15 @@ const SplashScreen: React.FC<SplashProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-6 relative">
+      {(isInstallable || isIOS) && (
+        <button 
+          onClick={promptInstall}
+          className="absolute top-6 right-6 bg-slate-800 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold text-xs flex items-center gap-2 transition-all shadow-lg border border-slate-700 hover:border-green-500 animate-in fade-in slide-in-from-top-4"
+        >
+          <Download size={14} /> INSTALAR APP
+        </button>
+      )}
       <div className="bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl text-center border border-slate-700 max-w-sm w-full">
         <h1 className="text-6xl font-black text-yellow-500 mb-2 italic tracking-tighter">CATAN</h1>
         <p className="text-slate-500 text-[10px] mb-8 uppercase font-bold tracking-widest italic">Multiplayer Online Edition</p>
