@@ -6,8 +6,9 @@ import GameBoard from './components/Map/GameBoard';
 import Sidebar from './components/Sidebar/Sidebar';
 import TradePanel from './components/Trade/TradePanel';
 import SplashScreen from './components/Splash/SplashScreen';
-import { Trophy, Home, Map as MapIcon, ArrowRightLeft, ChevronRight, Info } from 'lucide-react';
+import { Trophy, Home, Map as MapIcon, ArrowRightLeft, ChevronRight, Info, Download } from 'lucide-react';
 import RulesPanel from './components/Rules/RulesPanel';
+import { usePWAInstall } from './hooks/usePWAInstall';
 
 import Store from './components/Store/Store';
 import VictimSelection from './components/Robber/VictimSelection';
@@ -65,6 +66,7 @@ function App() {
   const [monopolyCard, setMonopolyCard] = useState<string | null>(null);
   const [yearOfPlentyCard, setYearOfPlentyCard] = useState<string | null>(null);
   const { sendTurnNotification, requestPermission } = useNotifications();
+  const { isInstallable, promptInstall } = usePWAInstall();
 
   const [error, setError] = useState<string | null>(null);
   const [activeCode, setActiveCode] = useState<string | null>(null);
@@ -249,6 +251,9 @@ function App() {
           </button>
           <button onClick={() => window.location.href = '/'} className="md:hidden p-1 text-slate-300 hover:text-red-500"><Home size={18} /></button>
           <button onClick={() => setShowRules(true)} className="md:hidden p-1 text-slate-300 hover:text-blue-500 ml-2"><Info size={18} /></button>
+          {isInstallable && (
+            <button onClick={promptInstall} className="md:hidden p-1 text-slate-300 hover:text-green-500 ml-2 animate-pulse"><Download size={18} /></button>
+          )}
         </div>
         <div className="flex bg-slate-100 p-0.5 rounded-xl w-[95%] md:w-auto shadow-inner">
           <button 
@@ -271,6 +276,9 @@ function App() {
           </button>
         </div>
         <div className="flex items-center">
+          {isInstallable && (
+             <button onClick={promptInstall} className="hidden md:block p-1 text-slate-300 mr-4 hover:text-green-500 transition-colors animate-pulse" title="Instalar Aplicación"><Download size={20} /></button>
+          )}
           <button onClick={() => setShowRules(true)} className="hidden md:block p-1 text-slate-300 mr-2 hover:text-blue-500 transition-colors"><Info size={20} /></button>
           <button onClick={() => window.location.href = '/'} className="hidden md:block p-1 text-slate-300 ml-4 hover:text-red-500"><Home size={20} /></button>
         </div>
