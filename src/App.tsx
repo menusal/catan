@@ -6,7 +6,8 @@ import GameBoard from './components/Map/GameBoard';
 import Sidebar from './components/Sidebar/Sidebar';
 import TradePanel from './components/Trade/TradePanel';
 import SplashScreen from './components/Splash/SplashScreen';
-import { Trophy, Home, Map as MapIcon, ArrowRightLeft, ChevronRight } from 'lucide-react';
+import { Trophy, Home, Map as MapIcon, ArrowRightLeft, ChevronRight, Info } from 'lucide-react';
+import RulesPanel from './components/Rules/RulesPanel';
 
 import Store from './components/Store/Store';
 import VictimSelection from './components/Robber/VictimSelection';
@@ -60,6 +61,7 @@ function App() {
   } = useGameState(gameSession, updateState, playerId);
 
   const [showingDevHand, setShowingDevHand] = useState(false);
+  const [showRules, setShowRules] = useState(false);
   const [monopolyCard, setMonopolyCard] = useState<string | null>(null);
   const [yearOfPlentyCard, setYearOfPlentyCard] = useState<string | null>(null);
   const { sendTurnNotification, requestPermission } = useNotifications();
@@ -246,6 +248,7 @@ function App() {
             CATAN ONLINE - {gameSession.gameCode}
           </button>
           <button onClick={() => window.location.href = '/'} className="md:hidden p-1 text-slate-300 hover:text-red-500"><Home size={18} /></button>
+          <button onClick={() => setShowRules(true)} className="md:hidden p-1 text-slate-300 hover:text-blue-500 ml-2"><Info size={18} /></button>
         </div>
         <div className="flex bg-slate-100 p-0.5 rounded-xl w-[95%] md:w-auto shadow-inner">
           <button 
@@ -267,7 +270,10 @@ function App() {
             <ScrollText size={14} /> <span className="hidden xs:inline">COSTES</span>
           </button>
         </div>
-        <button onClick={() => window.location.href = '/'} className="hidden md:block p-1 text-slate-300 ml-4 hover:text-red-500"><Home size={20} /></button>
+        <div className="flex items-center">
+          <button onClick={() => setShowRules(true)} className="hidden md:block p-1 text-slate-300 mr-2 hover:text-blue-500 transition-colors"><Info size={20} /></button>
+          <button onClick={() => window.location.href = '/'} className="hidden md:block p-1 text-slate-300 ml-4 hover:text-red-500"><Home size={20} /></button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto bg-slate-100 flex flex-col">
@@ -369,6 +375,10 @@ function App() {
           <div className="absolute inset-0 bg-white md:bg-slate-900/40 md:backdrop-blur-md z-40 flex items-center justify-center p-0 md:p-4 animate-in fade-in duration-200">
             <CostsPanel onClose={() => setActiveView('board')} />
           </div>
+        )}
+
+        {showRules && (
+          <RulesPanel onClose={() => setShowRules(false)} />
         )}
         {stealCandidates.length > 0 && (
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-in fade-in duration-300">
