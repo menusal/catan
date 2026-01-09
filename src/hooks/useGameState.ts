@@ -560,14 +560,35 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
         const playersList = remoteSession.players;
         let highestRoll = -1;
         let starterIdx = 0;
+        const tiedPlayers: number[] = [];
         
+        // First pass: find the highest roll
         playersList.forEach((p, i) => {
           const roll = rolls[p.playerId!] || 0;
           if (roll > highestRoll) {
             highestRoll = roll;
-            starterIdx = i;
+            tiedPlayers.length = 0; // Clear previous ties
+            tiedPlayers.push(i);
+          } else if (roll === highestRoll && roll > 0) {
+            tiedPlayers.push(i);
           }
         });
+
+        // If there are ties, select the last player in the tie (or could implement re-roll)
+        // For now, we'll select the last player with the highest roll to be fair
+        if (tiedPlayers.length > 1) {
+          // If there are ties, select the last player with the highest roll
+          starterIdx = tiedPlayers[tiedPlayers.length - 1];
+          console.log(`[Initial Rolls] Ties detected! Players ${tiedPlayers.map(i => playersList[i]?.name || `J${i+1}`).join(', ')} all rolled ${highestRoll}. Selecting ${playersList[starterIdx]?.name || `J${starterIdx+1}`}`);
+        } else {
+          starterIdx = tiedPlayers[0];
+        }
+
+        console.log(`[Initial Rolls] All rolls:`, Object.entries(rolls).map(([pid, roll]) => {
+          const pIdx = playersList.findIndex(p => p.playerId === pid);
+          return `${playersList[pIdx]?.name || `J${pIdx+1}`}: ${roll}`;
+        }).join(', '));
+        console.log(`[Initial Rolls] Highest roll: ${highestRoll}, Starter: ${playersList[starterIdx]?.name || `J${starterIdx+1}`} (index ${starterIdx})`);
 
         onUpdate({
           gameState: 'PLAYING',
@@ -578,7 +599,7 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
         });
       }
     }
-  }, [remoteSession?.initialRolls, remoteSession?.gameState, remoteSession?.hostId, currentPlayerId]);
+  }, [remoteSession?.initialRolls, remoteSession?.gameState, remoteSession?.hostId, currentPlayerId, players, logs, onUpdate]);
 
   const getTradeRate = (res: ResourceType): number => {
     let rate = 4;
