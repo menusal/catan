@@ -85,14 +85,21 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
       // Give resources on the SECOND settlement (Snake order round 2)
       const turnIndex = Math.floor(nextStep / 2);
       if (turnIndex >= numPlayers && nextStep % 2 === 1) {
+        // Find all hexagons that have this vertex
         board.forEach(hex => {
           if (hex.type === 'DESERT') return;
-          const [vx, vy] = vId.split('-').map(Number);
-          const hx = HEX_WIDTH * (hex.q + hex.r / 2) + CENTER_X;
-          const hy = HEX_HEIGHT * (3 / 4) * hex.r + CENTER_Y;
-          if (Math.sqrt((vx - hx)**2 + (vy - hy)**2) < HEX_SIZE + 5) {
-            const resName = RESOURCES[hex.type].name as ResourceType;
-            newRes[resName] = (newRes[resName] || 0) + 1;
+          
+          // Check all 6 vertices of this hex
+          for (let i = 0; i < 6; i++) {
+            const vertexPos = getVertexPos(hex.q, hex.r, i);
+            const vertexId = `${vertexPos.x}-${vertexPos.y}`;
+            
+            // If this hex has the settlement's vertex, give the resource
+            if (vertexId === vId) {
+              const resName = RESOURCES[hex.type].name as ResourceType;
+              newRes[resName] = (newRes[resName] || 0) + 1;
+              break; // Only count each hex once
+            }
           }
         });
       }
