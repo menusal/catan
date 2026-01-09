@@ -306,6 +306,8 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
 
       if (nextStep >= numPlayers * 4) {
         updates.setupPhase = false;
+        // @ts-ignore
+        updates.hasRolled = false; // Reset so first player can roll dice
         updates.logs = ["¡Setup terminado! Tira los dados.", ...logs].slice(0, 8);
       } else {
         const turnIndex = Math.floor(nextStep / 2);
