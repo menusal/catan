@@ -45,7 +45,7 @@ export const useNotifications = () => {
         notifications: [
           {
             title: "¡Es tu turno!",
-            body: "Todos los jugadores están esperando tu jugada en Catan Online.",
+            body: "Todos los jugadores están esperando tu jugada en Sky Island Game.",
             id: 1,
             // Fire immediately
             schedule: { at: new Date(Date.now() + 100) },

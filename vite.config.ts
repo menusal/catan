@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'Catan Online',
-        short_name: 'Catan',
-        description: 'Juego de mesa Catan en línea',
+        name: 'Sky Island Game',
+        short_name: 'Sky Island',
+        description: 'Juego de estrategia multijugador en línea - Sky Island Game',
         theme_color: '#f59e0b',
         background_color: '#0f172a',
         display: 'standalone',

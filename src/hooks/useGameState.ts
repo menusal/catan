@@ -351,7 +351,7 @@ export const useGameState = (remoteSession: GameSession | null, onUpdate: (updat
       let nextPlayerIdx: number;
       
       if (nextStep >= numPlayers * 4) {
-        // Setup ends - according to Catan rules, the first player (who placed first settlement/road) starts the game
+        // Setup ends - according to Sky Island Game rules, the first player (who placed first settlement/road) starts the game
         updates.setupPhase = false;
         // @ts-ignore
         updates.hasRolled = false; // Reset so first player can roll dice

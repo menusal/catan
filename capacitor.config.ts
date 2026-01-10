@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.catan.online',
-  appName: 'Catan Online',
+  appId: 'com.skyisland.game',
+  appName: 'Sky Island Game',
   webDir: 'dist'
 };
 

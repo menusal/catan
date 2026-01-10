@@ -79,7 +79,7 @@ const SplashScreen: React.FC<SplashProps> = ({
         </button>
       )}
       <div className="bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl text-center border border-slate-700 max-w-sm w-full">
-        <h1 className="text-6xl font-black text-yellow-500 mb-2 italic tracking-tighter">CATAN</h1>
+        <h1 className="text-6xl font-black text-yellow-500 mb-2 italic tracking-tighter">SKY ISLAND GAME</h1>
         <p className="text-slate-500 text-[14px] md:text-[10px] mb-8 uppercase font-bold tracking-widest italic">Multiplayer Online Edition</p>
         
         <div className="mb-8 text-left">

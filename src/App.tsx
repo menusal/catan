@@ -223,7 +223,7 @@ function App() {
             {gameSession.players[winnerIdx]?.name || `Jugador ${winnerIdx + 1}`}
           </p>
           <div className="w-24 h-2 mx-auto rounded-full mb-4" style={{ backgroundColor: winnerColor }} />
-          <p className="text-slate-400 font-bold italic">Ha colonizado Catan con éxito.</p>
+          <p className="text-slate-400 font-bold italic">Has conquistado la isla flotante con éxito.</p>
         </div>
 
         <button 
@@ -247,7 +247,7 @@ function App() {
             }}
             className="font-black text-slate-800 italic text-sm uppercase tracking-tighter hover:text-indigo-600 transition-colors cursor-copy active:scale-95"
           >
-            CATAN ONLINE - {gameSession.gameCode}
+            SKY ISLAND GAME - {gameSession.gameCode}
           </button>
           <button onClick={() => { localStorage.removeItem('catan_game_code'); window.location.href = '/'; }} className="md:hidden p-1 text-slate-300 hover:text-red-500"><Home size={18} /></button>
           <button onClick={() => setShowRules(true)} className="md:hidden p-1 text-slate-300 hover:text-blue-500 ml-2"><Info size={18} /></button>
